@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'imagekit',
     'main_page.apps.MainPageConfig',
     'news.apps.NewsConfig'
 ]
@@ -121,3 +122,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media/'
