@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'imagekit',
     'main_page.apps.MainPageConfig',
-    'news.apps.NewsConfig'
+    'news.apps.NewsConfig',
+    'admin.apps.AdminConfig'
 ]
 
 MIDDLEWARE = [
@@ -103,6 +104,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser'
+    ]
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
