@@ -14,6 +14,9 @@ class MainSlider(models.Model):
     )
     url = models.URLField(max_length=255, verbose_name='Подробнее по ссылке')
 
+    def __str__(self):
+        return self.title
+
 
 # partners model
 class Partner(models.Model):
@@ -24,3 +27,6 @@ class Partner(models.Model):
         verbose_name='Логотип'
     )
     url = models.URLField(max_length=255, verbose_name='Сайт партнёра')
+
+    def __str__(self):
+        return self.name
