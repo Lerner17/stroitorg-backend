@@ -24,3 +24,17 @@ class Partner(models.Model):
         verbose_name='Логотип'
     )
     url = models.URLField(max_length=255, verbose_name='Сайт партнёра')
+
+
+class EmployeeCard(models.Model):
+
+    first_name = models.CharField(max_length=32, blank=False)
+    last_name = models.CharField(max_length=32, blank=False)
+    position = models.CharField(max_length=32, blank=False)
+    bio = models.TextField()
+    avatar = ProcessedImageField(
+        upload_to='avatars/',
+        processors=[ResizeToFit(167, 162)],
+        verbose_name='Фото сотрудника'
+    )
+    email = models.EmailField(max_length=255, blank=True, null=True)
