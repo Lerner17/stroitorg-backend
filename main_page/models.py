@@ -44,3 +44,14 @@ class EmployeeCard(models.Model):
         verbose_name='Фото сотрудника'
     )
     email = models.EmailField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.first_name
+
+
+class Advantage(models.Model):
+    title = models.CharField(max_length=64)
+    image = ProcessedImageField(
+        upload_to='advantages/',
+        processors=[ResizeToFit(350, 270)]
+    )
