@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'imagekit',
     'main_page.apps.MainPageConfig',
     'news.apps.NewsConfig',
+    'catalog.apps.CatalogConfig',
     'admin_panel'
 ]
 
