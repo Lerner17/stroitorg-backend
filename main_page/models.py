@@ -37,7 +37,7 @@ class EmployeeCard(models.Model):
     first_name = models.CharField(max_length=32, blank=False)
     last_name = models.CharField(max_length=32, blank=False)
     position = models.CharField(max_length=32, blank=False)
-    bio = models.TextField()
+    bio = models.TextField(blank=True)
     avatar = ProcessedImageField(
         upload_to='avatars/',
         processors=[ResizeToFit(167, 162)],

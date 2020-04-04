@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import MainSlider, Partner
+from .models import MainSlider, Partner, EmployeeCard
+
+admin.site.register(EmployeeCard)
 
 
 @admin.register(MainSlider)
