@@ -1,6 +1,7 @@
 from rest_framework import permissions, viewsets, mixins
-from .serializers import MainSliderSerializer, PartnerSerializer, EmployeeSerializer, AdvantageSerializer
-from .models import MainSlider, Partner, EmployeeCard, Advantage
+from .serializers import MainSliderSerializer, PartnerSerializer, EmployeeSerializer, AdvantageSerializer, \
+    ProjectSerializer, NumberWithTextSerializer
+from .models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
 
 
 class MainSliderViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
@@ -24,4 +25,16 @@ class EmployeeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
 class AdvantageViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Advantage.objects.all()
     serializer_class = AdvantageSerializer
+    permission_classes = (permissions.AllowAny, )
+
+
+class ProjectViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = (permissions.AllowAny, )
+
+
+class NumberWithTextViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = NumberWithText.objects.all()
+    serializer_class = NumberWithTextSerializer
     permission_classes = (permissions.AllowAny, )

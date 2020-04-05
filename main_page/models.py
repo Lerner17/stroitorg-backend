@@ -4,6 +4,9 @@ from imagekit.processors import ResizeToFit
 
 
 # main slider model
+from slugify import slugify
+
+
 class MainSlider(models.Model):
     title = models.CharField(max_length=64, verbose_name='Заголовок')
     text = models.CharField(max_length=255, verbose_name='Описание')
@@ -55,3 +58,26 @@ class Advantage(models.Model):
         upload_to='advantages/',
         processors=[ResizeToFit(350, 270)]
     )
+
+
+class Project(models.Model):
+    title = models.CharField(max_length=127)
+    slug = models.SlugField(blank=True)
+    description = models.TextField()
+    image = ProcessedImageField(
+        upload_to='projects/',
+        processors=[ResizeToFit(400, 470)]
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.id and not self.slug:
+            self.slug = slugify(self.title)
+        elif not self.id:
+            self.slug = slugify(self.slug)
+
+        super().save(*args, **kwargs)
+
+
+class NumberWithText(models.Model):
+    text = models.CharField(max_length=32)
+    number = models.PositiveIntegerField()
