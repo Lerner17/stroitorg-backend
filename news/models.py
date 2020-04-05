@@ -1,8 +1,8 @@
 from django.db import models
 from slugify import slugify
 
-class News(models.Model):
 
+class News(models.Model):
     title = models.CharField(max_length=255, blank=False)
     description = models.TextField()
     content = models.TextField(blank=False)
