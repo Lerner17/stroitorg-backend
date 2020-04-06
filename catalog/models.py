@@ -1,14 +1,30 @@
 from django.db import models
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
-
-
-# Product model
 from slugify import slugify
+
+
+class Category(models.Model):
+    slug = models.SlugField(blank=True)
+    name = models.CharField(max_length=64)
+    description = models.TextField()
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        if not self.id and not self.slug:
+            self.slug = slugify(self.name)
+        elif not self.id:
+            self.slug = slugify(self.slug)
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
     slug = models.SlugField(blank=True)
+    category = models.ForeignKey(Category, null=True, related_name='products', on_delete=models.SET_NULL)
     name = models.CharField(max_length=127)
     description = models.TextField()
     price = models.PositiveIntegerField()
@@ -23,3 +39,14 @@ class Product(models.Model):
             self.slug = slugify(self.slug)
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class ProductImage(models.Model):
+    image = ProcessedImageField(
+        upload_to='products/',
+        processors=[ResizeToFit(195, 141)]
+    )
+    product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)
