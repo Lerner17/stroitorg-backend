@@ -9,7 +9,7 @@ from slugify import slugify
 
 class Product(models.Model):
     slug = models.SlugField(blank=True)
-    name = models.CharField(max_length=127)
+    title = models.CharField(max_length=127)
     description = models.TextField()
     price = models.PositiveIntegerField()
     new_price = models.PositiveIntegerField(null=True, blank=True)
@@ -18,7 +18,7 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id and not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.title)
         elif not self.id:
             self.slug = slugify(self.slug)
 
