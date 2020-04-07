@@ -11,6 +11,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True)
     parameters = serializers.SerializerMethodField('get_parameters')
+    category = serializers.SerializerMethodField('get_category')
 
     @staticmethod
     def get_parameters(product):
@@ -24,6 +25,15 @@ class ProductSerializer(serializers.ModelSerializer):
                     }
                     parameter_list.append(parameter_object)
         return parameter_list
+
+    @staticmethod
+    def get_category(product):
+        category = Category.objects.get(id=product.category.id)
+        return {
+            'id': category.id,
+            'slug': category.slug,
+            'name': category.name
+        }
 
     class Meta:
         model = Product
