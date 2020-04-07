@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, ProductImage, Category
+from .models import Product, ProductImage, Category, ParameterValue, Parameter
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -10,6 +10,20 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True)
+    parameters = serializers.SerializerMethodField('get_parameters')
+
+    @staticmethod
+    def get_parameters(product):
+        parameter_list = []
+        for parameter in Parameter.objects.filter(category=product.category):
+            for value in ParameterValue.objects.filter(parameter=parameter):
+                if value.product == product:
+                    parameter_object = {
+                        'name': parameter.name,
+                        'value': value.value
+                    }
+                    parameter_list.append(parameter_object)
+        return parameter_list
 
     class Meta:
         model = Product

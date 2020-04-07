@@ -50,3 +50,22 @@ class ProductImage(models.Model):
         processors=[ResizeToFit(195, 141)]
     )
     product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)
+
+
+class Parameter(models.Model):
+    name = models.CharField(max_length=32)
+    category = models.ForeignKey(Category, null=True, related_name='parameters', on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.name
+
+
+class ParameterValue(models.Model):
+    parameter = models.ForeignKey(Parameter, related_name='values', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,
+                                related_name='parameters',
+                                on_delete=models.CASCADE)
+    value = models.CharField(max_length=32)
+
+    def __str__(self):
+        return str(self.parameter.name + ' ' + self.product.name)
