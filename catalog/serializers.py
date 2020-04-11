@@ -53,7 +53,48 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategoryListSerializer(serializers.ModelSerializer):
+    children = serializers.SerializerMethodField('get_children')
+    parents = serializers.SerializerMethodField('get_parents')
+
+    @staticmethod
+    def get_parents(category):
+        is_have_parent = False if not category.parent else True
+        parent_list = []
+        parent = {}
+        if is_have_parent:
+            parent = category.parent
+        while is_have_parent:
+            parent_object = {
+                'id': parent.id,
+                'slug': parent.slug,
+                'name': parent.name
+            }
+            parent_list.append(parent_object)
+            if parent.parent:
+                parent = parent.parent
+            else:
+                is_have_parent = False
+        return parent_list
+
+    @staticmethod
+    def get_children(category):
+        children_list = []
+        for child in Category.objects.filter(parent=category):
+            child_object = {
+                'id': child.id,
+                'slug': child.slug,
+                'name': child.name
+            }
+            children_list.append(child_object)
+        return children_list
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField('get_products')
     children = serializers.SerializerMethodField('get_children')
     parents = serializers.SerializerMethodField('get_parents')
