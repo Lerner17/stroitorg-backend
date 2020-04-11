@@ -45,7 +45,7 @@ class ProductSerializer(serializers.ModelSerializer):
         preview = ''
         for image in ProductImage.objects.filter(product=product.id):
             if image.is_preview:
-                preview = str(image.image)
+                preview = image.image.url
         return preview
 
     class Meta:
