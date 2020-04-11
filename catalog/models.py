@@ -47,9 +47,10 @@ class Product(models.Model):
 class ProductImage(models.Model):
     image = ProcessedImageField(
         upload_to='products/',
-        processors=[ResizeToFit(195, 141)]
+        processors=[ResizeToFit(500, 500)]
     )
     product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)
+    is_preview = models.BooleanField(default=False)
 
 
 class Parameter(models.Model):

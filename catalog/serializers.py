@@ -12,6 +12,7 @@ class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True)
     parameters = serializers.SerializerMethodField('get_parameters')
     category = serializers.SerializerMethodField('get_category')
+    preview = serializers.SerializerMethodField('get_preview_picture')
 
     @staticmethod
     def get_parameters(product):
@@ -29,12 +30,23 @@ class ProductSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_category(product):
-        category = Category.objects.get(id=product.category.id)
-        return {
-            'id': category.id,
-            'slug': category.slug,
-            'name': category.name
-        }
+        if product.category:
+            category = Category.objects.get(id=product.category.id)
+            return {
+                'id': category.id,
+                'slug': category.slug,
+                'name': category.name
+            }
+        else:
+            return []
+
+    @staticmethod
+    def get_preview_picture(product):
+        preview = ''
+        for image in ProductImage.objects.filter(product=product.id):
+            if image.is_preview:
+                preview = str(image.image)
+        return preview
 
     class Meta:
         model = Product
