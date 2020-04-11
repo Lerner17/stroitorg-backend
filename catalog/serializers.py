@@ -42,7 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_preview_picture(product):
-        preview = ''
+        preview = None
         for image in ProductImage.objects.filter(product=product.id):
             if image.is_preview:
                 preview = image.image.url
