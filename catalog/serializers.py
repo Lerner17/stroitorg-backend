@@ -20,6 +20,7 @@ class ProductSerializer(serializers.ModelSerializer):
             for value in ParameterValue.objects.filter(parameter=parameter):
                 if value.product == product:
                     parameter_object = {
+                        'id': parameter.id,
                         'name': parameter.name,
                         'value': value.value
                     }
