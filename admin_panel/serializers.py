@@ -3,6 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from news.models import News
 from catalog.models import Category, Product, ProductImage, Parameter, ParameterValue
+from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,6 +26,42 @@ class AdminNewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = ('id', 'title', 'description', 'content', 'created_at', 'updated_at', 'is_active', 'slug', 'image')
+
+
+class AdminMainSliderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MainSlider
+        fields = '__all__'
+
+
+class AdminPartnerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Partner
+        fields = '__all__'
+
+
+class AdminEmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeeCard
+        fields = '__all__'
+
+
+class AdminAdvantageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advantage
+        fields = '__all__'
+
+
+class AdminProjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = '__all__'
+
+
+class AdminNumberWithTextSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NumberWithText
+        fields = '__all__'
 
 
 class AdminCategorySerializer(serializers.ModelSerializer):

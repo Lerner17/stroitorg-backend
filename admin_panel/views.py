@@ -7,10 +7,12 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
 from news.models import News
 from catalog.models import Category, Product
 from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySerializer, AdminProductSerializer, \
-    AdminProductCreateSerializer, ChangePasswordSerializer
+    AdminProductCreateSerializer, ChangePasswordSerializer, AdminMainSliderSerializer, AdminPartnerSerializer, \
+    AdminEmployeeSerializer, AdminAdvantageSerializer, AdminProjectSerializer, AdminNumberWithTextSerializer
 from rest_framework import mixins
 
 
@@ -64,7 +66,7 @@ class UpdatePassword(APIView):
     """
     An endpoint for changing password.
     """
-    permission_classes = (permissions.IsAdminUser, )
+    permission_classes = (permissions.IsAdminUser,)
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -146,3 +148,63 @@ class AdminNewsViewSet(viewsets.GenericViewSet,
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminNewsSerializer
     queryset = News.objects.all()
+
+
+class AdminMainSliderViewSet(viewsets.GenericViewSet,
+                             mixins.ListModelMixin,
+                             mixins.CreateModelMixin,
+                             mixins.DestroyModelMixin,
+                             mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = AdminMainSliderSerializer
+    queryset = MainSlider.objects.all()
+
+
+class AdminPartnerViewSet(viewsets.GenericViewSet,
+                          mixins.ListModelMixin,
+                          mixins.CreateModelMixin,
+                          mixins.DestroyModelMixin,
+                          mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = AdminPartnerSerializer
+    queryset = Partner.objects.all()
+
+
+class AdminEmployeeViewSet(viewsets.GenericViewSet,
+                           mixins.ListModelMixin,
+                           mixins.CreateModelMixin,
+                           mixins.DestroyModelMixin,
+                           mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = AdminEmployeeSerializer
+    queryset = EmployeeCard.objects.all()
+
+
+class AdminAdvantageViewSet(viewsets.GenericViewSet,
+                            mixins.ListModelMixin,
+                            mixins.CreateModelMixin,
+                            mixins.DestroyModelMixin,
+                            mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = AdminAdvantageSerializer
+    queryset = Advantage.objects.all()
+
+
+class AdminProjectViewSet(viewsets.GenericViewSet,
+                          mixins.ListModelMixin,
+                          mixins.CreateModelMixin,
+                          mixins.DestroyModelMixin,
+                          mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = AdminProjectSerializer
+    queryset = Project.objects.all()
+
+
+class AdminNumberWithTextViewSet(viewsets.GenericViewSet,
+                                 mixins.ListModelMixin,
+                                 mixins.CreateModelMixin,
+                                 mixins.DestroyModelMixin,
+                                 mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = AdminNumberWithTextSerializer
+    queryset = NumberWithText.objects.all()
