@@ -1,17 +1,16 @@
 from django.contrib.auth import authenticate
-from django.core.validators import validate_email
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from news.models import News
 from catalog.models import Category, Product
 from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySerializer, AdminProductSerializer, \
-    AdminProductCreateSerializer
+    AdminProductCreateSerializer, ChangePasswordSerializer
 from rest_framework import mixins
 
 
@@ -60,6 +59,32 @@ def user_info(request):
         'user': serializer.data
     }, status=200)
 
+
+class UpdatePassword(APIView):
+    """
+    An endpoint for changing password.
+    """
+    permission_classes = (permissions.IsAdminUser, )
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            old_password = serializer.data.get("old_password")
+            if not self.object.check_password(old_password):
+                return Response({"old_password": ["Wrong password."]},
+                                status=400)
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            return Response({'success': True, 'message': 'Пароль успешно изменен.'}, status=204)
+
+        return Response(serializer.errors, status=400)
 
 
 class AdminCategoryViewSet(viewsets.GenericViewSet,
