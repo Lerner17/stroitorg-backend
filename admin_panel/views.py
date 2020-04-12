@@ -82,7 +82,7 @@ class UpdatePassword(APIView):
             # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
-            return Response({'success': True, 'message': 'Пароль успешно изменен.'}, status=204)
+            return Response({'success': True, 'message': 'Пароль успешно изменен.'}, status=200)
 
         return Response(serializer.errors, status=400)
 
