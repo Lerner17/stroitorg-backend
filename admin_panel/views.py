@@ -8,7 +8,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from news.models import News
-from .serializers import AdminNewsSerializer, UserSerializer
+from catalog.models import Category
+from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySerializer
 from rest_framework import mixins
 
 
@@ -36,6 +37,16 @@ def login(request):
             return Response({'success': False, 'message': 'Не валидный Email'}, status=400)
     else:
         return Response({'success': False, 'message': 'Поля логин и пароль обязательные.'}, status=400)
+
+
+class AdminCategoryViewSet(viewsets.GenericViewSet,
+                           mixins.ListModelMixin,
+                           mixins.CreateModelMixin,
+                           mixins.DestroyModelMixin,
+                           mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser, )
+    serializer_class = AdminCategorySerializer
+    queryset = Category.objects.all()
 
 
 class AdminNewsViewSet(viewsets.GenericViewSet,
