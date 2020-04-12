@@ -85,6 +85,12 @@ class AdminProductSerializer(serializers.ModelSerializer):
 
 
 class AdminProductCreateSerializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField('save_category')
+
+    @staticmethod
+    def save_category(category):
+        return category.save()
+
     class Meta:
         model = Product
         fields = '__all__'

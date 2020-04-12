@@ -110,7 +110,8 @@ class AdminProductViewSet(viewsets.GenericViewSet,
     ordering_fields = ['id']
 
     def perform_create(self, serializer):
-        pass
+        category = Category.objects.get(pk=self.request.data.get('category_id'))
+        serializer.save(category=category)
 
     def get_serializer_class(self):
         if self.action == 'create':
