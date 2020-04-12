@@ -17,5 +17,6 @@ class AdminNewsSerializer(serializers.ModelSerializer):
 
 
 class AdminCategorySerializer(serializers.ModelSerializer):
-    model = Category
-    fields = '__all__'
+    class Meta:
+        model = Category
+        fields = '__all__'
