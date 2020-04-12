@@ -37,17 +37,39 @@ def login(request):
         return Response({'success': False, 'message': 'Поля логин и пароль обязательные.'}, status=400)
 
 
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes((permissions.AllowAny,))
+def user_info(request):
+    try:
+        token_header = request.headers['Authorization']
+    except KeyError:
+        return Response({'success': False, 'message': 'Вы не авторизованы.'}, status=400)
+
+    try:
+        token = token_header.split()[1]
+    except IndexError:
+        return Response({'success': False, 'message': 'Неверный токен.'}, status=400)
+
+    token_object = Token.objects.get(pk=token)
+    serializer = UserSerializer(token_object.user)
+
+    return Response({
+        'success': True,
+        'token': token,
+        'user': serializer.data
+    }, status=200)
+
+
+
 class AdminCategoryViewSet(viewsets.GenericViewSet,
                            mixins.ListModelMixin,
                            mixins.CreateModelMixin,
                            mixins.DestroyModelMixin,
                            mixins.RetrieveModelMixin):
-    permission_classes = (permissions.IsAdminUser, )
+    permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminCategorySerializer
     queryset = Category.objects.all()
-    pagination_class = PageNumberPagination
-    DEFAULT_PAGINATION_COUNT = 10
-    ordering_fields = ['id']
 
 
 class AdminProductViewSet(viewsets.GenericViewSet,
@@ -58,10 +80,12 @@ class AdminProductViewSet(viewsets.GenericViewSet,
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminProductSerializer
     queryset = Product.objects.all()
+    pagination_class = PageNumberPagination
+    DEFAULT_PAGINATION_COUNT = 10
+    ordering_fields = ['id']
 
     def perform_create(self, serializer):
-        product = Product.objects.get(pk=self.kwargs['id'])
-        serializer.save(product=product)
+        pass
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -93,7 +117,6 @@ class AdminNewsViewSet(viewsets.GenericViewSet,
                        mixins.CreateModelMixin,
                        mixins.DestroyModelMixin,
                        mixins.RetrieveModelMixin):
-
-    permission_classes = (permissions.IsAdminUser, )
+    permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminNewsSerializer
     queryset = News.objects.all()

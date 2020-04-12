@@ -8,7 +8,6 @@ class Category(models.Model):
     slug = models.SlugField(blank=True)
     name = models.CharField(max_length=64)
     description = models.TextField()
-    # parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if not self.id and not self.slug:

@@ -74,4 +74,12 @@ class AdminProductSerializer(serializers.ModelSerializer):
 
 
 class AdminProductCreateSerializer(serializers.ModelSerializer):
-    pass
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+class AdminProductImageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = '__all__'
