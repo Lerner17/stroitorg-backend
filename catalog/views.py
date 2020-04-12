@@ -1,4 +1,4 @@
-from rest_framework import permissions, viewsets, mixins
+from rest_framework import permissions, viewsets, mixins, filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -7,6 +7,8 @@ from .serializers import ProductSerializer, CategoryListSerializer, CategoryDeta
 
 
 class ProductViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+    search_fields = ['name', 'description', 'category__name']
+    filter_backends = (filters.SearchFilter, )
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = (permissions.AllowAny, )
