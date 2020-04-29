@@ -48,3 +48,8 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
             return self.serializer_class
         else:
             return CategoryDetailSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = Category.objects.filter(parent=None)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
