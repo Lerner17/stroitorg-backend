@@ -34,7 +34,7 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id and not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.title)
         elif not self.id:
             self.slug = slugify(self.slug)
 
