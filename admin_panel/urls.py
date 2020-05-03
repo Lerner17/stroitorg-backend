@@ -2,9 +2,10 @@ from rest_framework.routers import DefaultRouter
 from django.urls import path
 from .views import AdminNewsViewSet, login, AdminCategoryViewSet, AdminProductViewSet, user_info, UpdatePassword, \
     AdminMainSliderViewSet, AdminPartnerViewSet, AdminEmployeeViewSet, AdminAdvantageViewSet, AdminProjectViewSet, \
-    AdminNumberWithTextViewSet
+    AdminNumberWithTextViewSet, AdminUserViewSet
 
 router = DefaultRouter()
+router.register(r'users', AdminUserViewSet)
 router.register(r'news', AdminNewsViewSet)
 router.register(r'main_slider', AdminMainSliderViewSet)
 router.register(r'partners', AdminPartnerViewSet)

@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, permissions
 from rest_framework.authtoken.models import Token
@@ -89,6 +90,16 @@ class UpdatePassword(APIView):
             return Response({'success': True, 'message': 'Пароль успешно изменен.'}, status=200)
 
         return Response(serializer.errors, status=400)
+
+
+class AdminUserViewSet(viewsets.GenericViewSet,
+                       mixins.ListModelMixin,
+                       mixins.CreateModelMixin,
+                       mixins.DestroyModelMixin,
+                       mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
 
 class AdminCategoryViewSet(viewsets.GenericViewSet,
