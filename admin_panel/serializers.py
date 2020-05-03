@@ -121,8 +121,15 @@ class AdminProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class AdminProductImageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = '__all__'
+
+
 class AdminProductCreateSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField('save_category')
+    # image = AdminProductImageCreateSerializer(many=True)
 
     @staticmethod
     def save_category(category):
@@ -130,10 +137,4 @@ class AdminProductCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = '__all__'
-
-
-class AdminProductImageCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductImage
         fields = '__all__'
