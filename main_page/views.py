@@ -19,7 +19,7 @@ class PartnersViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
 class EmployeeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = EmployeeCard.objects.all()
     serializer_class = EmployeeSerializer
-    permissions = (permissions.AllowAny, )
+    permission_classes = (permissions.AllowAny, )
 
 
 class AdvantageViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
