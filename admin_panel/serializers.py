@@ -2,7 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from news.models import News
-from catalog.models import Category, Product, ProductImage, Parameter, ParameterValue
+from catalog.models import Category, Product, ProductImage, Parameter
 from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
 
 
@@ -76,25 +76,23 @@ class AdminProductImageSerializer(serializers.ModelSerializer):
         fields = ('id', 'image')
 
 
+class AdminParameterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parameter
+        fields = ('name', 'value')
+
+
+class AdminParameterCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parameter
+        fields = '__all__'
+
+
 class AdminProductSerializer(serializers.ModelSerializer):
     images = AdminProductImageSerializer(many=True)
-    parameters = serializers.SerializerMethodField('get_parameters')
+    parameters = AdminParameterSerializer(many=True)
     category = serializers.SerializerMethodField('get_category')
     preview = serializers.SerializerMethodField('get_preview_picture')
-
-    @staticmethod
-    def get_parameters(product):
-        parameter_list = []
-        for parameter in Parameter.objects.filter(category=product.category):
-            for value in ParameterValue.objects.filter(parameter=parameter):
-                if value.product == product:
-                    parameter_object = {
-                        'id': parameter.id,
-                        'name': parameter.name,
-                        'value': value.value
-                    }
-                    parameter_list.append(parameter_object)
-        return parameter_list
 
     @staticmethod
     def get_category(product):

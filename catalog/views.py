@@ -1,9 +1,10 @@
+from django.core.mail import send_mail
 from rest_framework import permissions, viewsets, mixins, filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .models import Product, Category
-from .serializers import ProductSerializer, CategoryListSerializer, CategoryDetailSerializer
+from .models import Product, Category, Order
+from .serializers import ProductSerializer, CategoryListSerializer, CategoryDetailSerializer, OrderSerializer
 
 
 class ProductViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
@@ -53,3 +54,46 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Ret
         queryset = Category.objects.filter(parent=None)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class OrderViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def create(self, request, *args, **kwargs):
+        product_id_list = [product['id'] for product in request.data['products']]
+        product_list = request.data['products']
+        buyer_name = request.data.get('buyer_name', 'No name')
+        buyer_phone = request.data.get('buyer_phone', 'No phone')
+        comment = request.data.get('comment', 'No comment')
+        serializer_data = {
+            "buyer_name": buyer_name,
+            "buyer_phone": buyer_phone,
+            "comment": comment,
+            "products": product_id_list
+        }
+
+        serializer = self.get_serializer(data=serializer_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        products = Product.objects.filter(pk__in=product_id_list)
+        product_message = ''
+        total_price = 0
+        for product in products:
+            for count in product_list:
+                if product.id == count['id']:
+                    price = product.price * count['count']
+                    total_price += price
+                    product_message += f'{product.name} - {count["count"]} - {str(price)}\n'
+
+        subject = 'Новый заказ'
+        message = f'Имя покупателя: {buyer_name}\n Номер покупателя: {buyer_phone}\n Комментарий: {comment}\n Список ' \
+                  f'товаров: {product_message}\n Общая стоимость: {total_price}'
+        mail_from = 'site@example.com'
+        mail_to = ('admin@example.com', )
+        # send_mail(subject, message, mail_from, mail_to)
+        return Response(message)
+
+
