@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from news.models import News
 from catalog.models import Category, Product, ProductImage, Parameter, ParameterValue
 from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts
+from catalog.models import Category, Product, ProductImage, Parameter
+from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
 
 
 class ContactsAdminSerializer(serializers.ModelSerializer):
@@ -15,7 +17,8 @@ class ContactsAdminSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'last_login', 'is_superuser', 'username', 'email', 'first_name', 'last_name', 'is_staff')
+        fields = ('id', 'last_login', 'is_superuser', 'username',
+                  'email', 'first_name', 'last_name', 'is_staff')
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -31,7 +34,8 @@ class ChangePasswordSerializer(serializers.Serializer):
 class AdminNewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
-        fields = ('id', 'title', 'description', 'content', 'created_at', 'updated_at', 'is_active', 'slug', 'image')
+        fields = ('id', 'title', 'description', 'content',
+                  'created_at', 'updated_at', 'is_active', 'slug', 'image')
 
 
 class AdminMainSliderSerializer(serializers.ModelSerializer):
@@ -82,25 +86,23 @@ class AdminProductImageSerializer(serializers.ModelSerializer):
         fields = ('id', 'image')
 
 
+class AdminParameterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parameter
+        fields = ('name', 'value')
+
+
+class AdminParameterCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parameter
+        fields = '__all__'
+
+
 class AdminProductSerializer(serializers.ModelSerializer):
     images = AdminProductImageSerializer(many=True)
-    parameters = serializers.SerializerMethodField('get_parameters')
+    parameters = AdminParameterSerializer(many=True)
     category = serializers.SerializerMethodField('get_category')
     preview = serializers.SerializerMethodField('get_preview_picture')
-
-    @staticmethod
-    def get_parameters(product):
-        parameter_list = []
-        for parameter in Parameter.objects.filter(category=product.category):
-            for value in ParameterValue.objects.filter(parameter=parameter):
-                if value.product == product:
-                    parameter_object = {
-                        'id': parameter.id,
-                        'name': parameter.name,
-                        'value': value.value
-                    }
-                    parameter_list.append(parameter_object)
-        return parameter_list
 
     @staticmethod
     def get_category(product):

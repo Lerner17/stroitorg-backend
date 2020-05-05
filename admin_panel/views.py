@@ -15,7 +15,9 @@ from catalog.models import Category, Product, ProductImage
 from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySerializer, AdminProductSerializer, \
     AdminProductCreateSerializer, ChangePasswordSerializer, AdminMainSliderSerializer, AdminPartnerSerializer, \
     AdminEmployeeSerializer, AdminAdvantageSerializer, AdminProjectSerializer, AdminNumberWithTextSerializer, \
-    AdminProductImageCreateSerializer, ContactsAdminSerializer
+    AdminProductImageCreateSerializer, ContactsAdminSerializer, \
+    AdminParameterSerializer, AdminParameterCreateSerializer
+
 from rest_framework import mixins
 
 
@@ -146,22 +148,40 @@ class AdminProductViewSet(viewsets.GenericViewSet,
         serializer.save(category=category)
 
     def create(self, request, *args, **kwargs):
+        parameters = request.data.get('parameters', False)
+        # parameters = request.data['parameters']
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        image_data = {
-            'image': request.FILES['image'],
-            'product': serializer.data['id'],
-            'is_preview': True
-        }
+        if parameters:
+            parameters_to_db = []
+            for parameter in parameters:
+                parameter_object = {
+                    'name': parameter['name'],
+                    'value': parameter['value'],
+                    'product': serializer.data['id']
+                }
+                parameters_to_db.append(parameter_object)
+            param_ser = AdminParameterCreateSerializer(
+                data=parameters_to_db, many=True)
+            param_ser.is_valid(raise_exception=True)
+            param_ser.save()
 
-        image_serializer = AdminProductImageCreateSerializer(data=image_data)
-        if image_serializer.is_valid():
-            image_serializer.save()
-            return Response(image_serializer.data)
-        else:
-            return Response(image_serializer.errors)
+        # images_to_db = []
+
+        # for image in request.FILES['images']:
+        # image_data = {
+        #     'image': request.FILES['image'],
+        #     'product': serializer.data['id'],
+        #     'is_preview': True
+        # }
+        #     # images_to_db.append(image_data)
+        # img_ser = AdminProductImageCreateSerializer(data=image_data)
+        # img_ser.is_valid(raise_exception=True)
+        # img_ser.save()
+
+        return Response(serializer.data)
 
     def get_serializer_class(self):
         if self.action == 'create':
