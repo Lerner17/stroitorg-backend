@@ -9,14 +9,24 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from catalog.serializers import CategoryListSerializer
-from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
+from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts
 from news.models import News
 from catalog.models import Category, Product, ProductImage
 from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySerializer, AdminProductSerializer, \
     AdminProductCreateSerializer, ChangePasswordSerializer, AdminMainSliderSerializer, AdminPartnerSerializer, \
     AdminEmployeeSerializer, AdminAdvantageSerializer, AdminProjectSerializer, AdminNumberWithTextSerializer, \
-    AdminProductImageCreateSerializer
+    AdminProductImageCreateSerializer, ContactsAdminSerializer
 from rest_framework import mixins
+
+
+class AdminContactsViewSet(viewsets.GenericViewSet,
+                           mixins.ListModelMixin,
+                           mixins.CreateModelMixin,
+                           mixins.DestroyModelMixin,
+                           mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = ContactsAdminSerializer
+    queryset = Contacts.objects.first()
 
 
 @csrf_exempt
@@ -131,7 +141,8 @@ class AdminProductViewSet(viewsets.GenericViewSet,
     ordering_fields = ['id']
 
     def perform_create(self, serializer):
-        category = Category.objects.get(pk=self.request.data.get('category_id'))
+        category = Category.objects.get(
+            pk=self.request.data.get('category_id'))
         serializer.save(category=category)
 
     def create(self, request, *args, **kwargs):

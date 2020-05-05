@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
+from .models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts
 
 
 class MainSliderSerializer(serializers.ModelSerializer):
@@ -35,4 +35,10 @@ class ProjectSerializer(serializers.ModelSerializer):
 class NumberWithTextSerializer(serializers.ModelSerializer):
     class Meta:
         model = NumberWithText
+        fields = '__all__'
+
+
+class ContactsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contacts
         fields = '__all__'

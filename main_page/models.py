@@ -7,6 +7,16 @@ from imagekit.processors import ResizeToFit
 from slugify import slugify
 
 
+class Contacts(models.Model):
+    twitter_url = models.URLField(null=True, blank=True)
+    intagram_url = models.URLField(null=True, blank=True)
+    vk_url = models.URLField(null=True, blank=True)
+    fb_url = models.URLField(null=True, blank=True)
+    phone = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(blank=True)
+    address = models.CharField(max_length=255, blank=True)
+
+
 class MainSlider(models.Model):
     title = models.CharField(max_length=64, verbose_name='Заголовок')
     text = models.CharField(max_length=255, verbose_name='Описание')

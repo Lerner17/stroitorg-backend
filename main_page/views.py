@@ -1,7 +1,13 @@
 from rest_framework import permissions, viewsets, mixins
 from .serializers import MainSliderSerializer, PartnerSerializer, EmployeeSerializer, AdvantageSerializer, \
-    ProjectSerializer, NumberWithTextSerializer
-from .models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
+    ProjectSerializer, NumberWithTextSerializer, ContactsSerializer
+from .models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts
+
+
+class ContactsViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = Contacts.objects.first()
+    serializer_class = ContactsSerializer
+    permission_classes = (permissions.AllowAny, )
 
 
 class MainSliderViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
