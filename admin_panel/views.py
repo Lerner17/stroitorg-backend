@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, views
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.pagination import PageNumberPagination
@@ -15,20 +15,42 @@ from catalog.models import Category, Product, ProductImage
 from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySerializer, AdminProductSerializer, \
     AdminProductCreateSerializer, ChangePasswordSerializer, AdminMainSliderSerializer, AdminPartnerSerializer, \
     AdminEmployeeSerializer, AdminAdvantageSerializer, AdminProjectSerializer, AdminNumberWithTextSerializer, \
-    AdminProductImageCreateSerializer, ContactsAdminSerializer, \
-    AdminParameterSerializer, AdminParameterCreateSerializer
+    AdminProductImageCreateSerializer, \
+    AdminParameterSerializer, AdminParameterCreateSerializer, ContactsAdminSerializer
 
 from rest_framework import mixins
 
 
-class AdminContactsViewSet(viewsets.GenericViewSet,
-                           mixins.ListModelMixin,
-                           mixins.CreateModelMixin,
-                           mixins.DestroyModelMixin,
-                           mixins.RetrieveModelMixin):
-    permission_classes = (permissions.IsAdminUser,)
-    serializer_class = ContactsAdminSerializer
-    queryset = Contacts.objects.first()
+class AdminContactsAPIView(views.APIView):
+
+    def get(self, request):
+        if not Contacts.objects.exists():
+            return Response({
+                'twitter_url': None,
+                'intagram_url': None,
+                'vk_url': None,
+                'fb_url': None,
+                'phone': None,
+                'email': None,
+                'address': None
+            })
+        else:
+            serializer = ContactsAdminSerializer(
+                Contacts.objects.first(), many=False)
+            return Response(serializer.data)
+
+    def put(self, request):
+        queryset = Contacts.objects.first()
+        if not Contacts.objects.exists():
+            serializer = ContactsAdminSerializer(queryset, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+        serializer = ContactsAdminSerializer(queryset, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 
 @csrf_exempt

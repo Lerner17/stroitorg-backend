@@ -2,16 +2,10 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from news.models import News
-from catalog.models import Category, Product, ProductImage, Parameter, ParameterValue
+from catalog.models import Category, Product, ProductImage, Parameter
 from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts
 from catalog.models import Category, Product, ProductImage, Parameter
 from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
-
-
-class ContactsAdminSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Contacts
-        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -84,6 +78,12 @@ class AdminProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = ('id', 'image')
+
+
+class ContactsAdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contacts
+        fields = '__all__'
 
 
 class AdminParameterSerializer(serializers.ModelSerializer):
