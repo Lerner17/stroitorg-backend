@@ -26,7 +26,6 @@ class Product(models.Model):
     slug = models.SlugField(blank=True)
     category = models.ForeignKey(Category, null=True, related_name='products', on_delete=models.SET_NULL)
     name = models.CharField(max_length=127)
-    color = models.CharField(max_length=64, null=True, blank=True)
     description = models.TextField()
     price = models.PositiveIntegerField()
     new_price = models.PositiveIntegerField(null=True, blank=True)
