@@ -1,9 +1,6 @@
 from django.db import models
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
-
-
-# main slider model
 from slugify import slugify
 
 
@@ -46,7 +43,6 @@ class Partner(models.Model):
 
 
 class EmployeeCard(models.Model):
-
     first_name = models.CharField(max_length=32, blank=False)
     last_name = models.CharField(max_length=32, blank=False)
     position = models.CharField(max_length=32, blank=False)
@@ -62,12 +58,17 @@ class EmployeeCard(models.Model):
         return self.first_name
 
 
-class Advantage(models.Model):
+class Gallery(models.Model):
     title = models.CharField(max_length=64)
     image = ProcessedImageField(
         upload_to='advantages/',
         processors=[ResizeToFit(350, 270)]
     )
+
+
+class Advantage(models.Model):
+    title = models.CharField(max_length=127)
+    description = models.TextField()
 
 
 class Project(models.Model):

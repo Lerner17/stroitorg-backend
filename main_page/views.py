@@ -1,7 +1,7 @@
 from rest_framework import permissions, viewsets, mixins
-from .serializers import MainSliderSerializer, PartnerSerializer, EmployeeSerializer, AdvantageSerializer, \
-    ProjectSerializer, NumberWithTextSerializer, ContactsSerializer
-from .models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts
+from .serializers import MainSliderSerializer, PartnerSerializer, EmployeeSerializer, GallerySerializer, \
+    ProjectSerializer, NumberWithTextSerializer, ContactsSerializer, AdvantageSerializer
+from .models import MainSlider, Partner, EmployeeCard, Gallery, Project, NumberWithText, Contacts, Advantage
 from rest_framework.response import Response
 
 
@@ -34,6 +34,12 @@ class PartnersViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
 class EmployeeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = EmployeeCard.objects.all()
     serializer_class = EmployeeSerializer
+    permission_classes = (permissions.AllowAny, )
+
+
+class GalleryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = Gallery.objects.all()
+    serializer_class = GallerySerializer
     permission_classes = (permissions.AllowAny, )
 
 
