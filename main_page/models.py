@@ -68,7 +68,7 @@ class Gallery(models.Model):
 
 class Advantage(models.Model):
     title = models.CharField(max_length=127)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
 
 
 class Project(models.Model):
