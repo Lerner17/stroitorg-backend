@@ -9,14 +9,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from catalog.serializers import CategoryListSerializer
-from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts
+from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts, Gallery
 from news.models import News
 from catalog.models import Category, Product, ProductImage
 from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySerializer, AdminProductSerializer, \
     AdminProductCreateSerializer, ChangePasswordSerializer, AdminMainSliderSerializer, AdminPartnerSerializer, \
     AdminEmployeeSerializer, AdminAdvantageSerializer, AdminProjectSerializer, AdminNumberWithTextSerializer, \
     AdminProductImageCreateSerializer, \
-    AdminParameterSerializer, AdminParameterCreateSerializer, ContactsAdminSerializer
+    AdminParameterSerializer, AdminParameterCreateSerializer, ContactsAdminSerializer, AdminGallerySerializer
 
 from rest_framework import mixins
 
@@ -278,6 +278,16 @@ class AdminAdvantageViewSet(viewsets.GenericViewSet,
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminAdvantageSerializer
     queryset = Advantage.objects.all()
+
+
+class AdminGalleryViewSet(viewsets.GenericViewSet,
+                          mixins.ListModelMixin,
+                          mixins.CreateModelMixin,
+                          mixins.DestroyModelMixin,
+                          mixins.RetrieveModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = AdminGallerySerializer
+    queryset = Gallery.objects.all()
 
 
 class AdminProjectViewSet(viewsets.GenericViewSet,

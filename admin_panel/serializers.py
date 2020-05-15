@@ -3,9 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from news.models import News
 from catalog.models import Category, Product, ProductImage, Parameter
-from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts
-from catalog.models import Category, Product, ProductImage, Parameter
-from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText
+from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Gallery, Contacts
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,6 +51,12 @@ class AdminEmployeeSerializer(serializers.ModelSerializer):
 class AdminAdvantageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advantage
+        fields = '__all__'
+
+
+class AdminGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gallery
         fields = '__all__'
 
 
