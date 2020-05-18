@@ -8,7 +8,8 @@ class Category(models.Model):
     slug = models.SlugField(blank=True)
     name = models.CharField(max_length=64)
     description = models.TextField()
-    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        'self', null=True, blank=True, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if not self.id and not self.slug:
@@ -22,15 +23,22 @@ class Category(models.Model):
         return self.name
 
 
+class Thickness(models.Model):
+    thickness = models.PositiveIntegerField(blank=False)
+
+
 class Product(models.Model):
     slug = models.SlugField(blank=True)
-    category = models.ForeignKey(Category, null=True, related_name='products', on_delete=models.SET_NULL)
+    category = models.ForeignKey(
+        Category, null=True, related_name='products', on_delete=models.SET_NULL)
     name = models.CharField(max_length=127)
     description = models.TextField()
     price = models.PositiveIntegerField()
     new_price = models.PositiveIntegerField(null=True, blank=True)
     is_new = models.BooleanField(default=False)
     is_discount = models.BooleanField(default=False)
+    thickness = models.ForeignKey(
+        Thickness, on_delete=models.SET_NULL, null=True)
 
     def save(self, *args, **kwargs):
         if not self.id and not self.slug:
@@ -49,14 +57,16 @@ class ProductImage(models.Model):
         upload_to='products/',
         processors=[ResizeToFit(500, 500)]
     )
-    product = models.ForeignKey(Product, related_name="images", on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, related_name="images", on_delete=models.CASCADE)
     is_preview = models.BooleanField(default=False)
 
 
 class Parameter(models.Model):
     name = models.CharField(max_length=32)
     value = models.CharField(max_length=128)
-    product = models.ForeignKey(Product, null=True, related_name='parameters', on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, null=True, related_name='parameters', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

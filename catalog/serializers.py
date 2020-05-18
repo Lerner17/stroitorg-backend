@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, ProductImage, Category, Parameter, Order
+from .models import Product, ProductImage, Category, Parameter, Order, Thickness
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -12,6 +12,12 @@ class ParameterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Parameter
         fields = ('name', 'value')
+
+
+class ThicknessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Thickness
+        fields = '__all__'
 
 
 class ProductSerializer(serializers.ModelSerializer):

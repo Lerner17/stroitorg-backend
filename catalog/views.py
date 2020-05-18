@@ -3,8 +3,14 @@ from rest_framework import permissions, viewsets, mixins, filters
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from .models import Product, Category, Order
-from .serializers import ProductSerializer, CategoryListSerializer, CategoryDetailSerializer, OrderSerializer
+from .models import Product, Category, Order, Thickness
+from .serializers import ProductSerializer, CategoryListSerializer, CategoryDetailSerializer, OrderSerializer, ThicknessSerializer
+
+
+class ThicknessViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = Thickness.objects.all()
+    serializer_class = ThicknessSerializer
+    permission_classes = (permissions.AllowAny, )
 
 
 class ProductViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
@@ -62,7 +68,8 @@ class OrderViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
     permission_classes = (permissions.AllowAny, )
 
     def create(self, request, *args, **kwargs):
-        product_id_list = [product['id'] for product in request.data['products']]
+        product_id_list = [product['id']
+                           for product in request.data['products']]
         product_list = request.data['products']
         buyer_name = request.data.get('buyer_name', 'No name')
         buyer_phone = request.data.get('buyer_phone', 'No phone')
@@ -95,5 +102,4 @@ class OrderViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
         mail_to = ('admin@example.com', )
         # send_mail(subject, message, mail_from, mail_to)
         return Response(message)
-
 
