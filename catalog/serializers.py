@@ -93,7 +93,8 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
 
 class CategoryDetailSerializer(serializers.ModelSerializer):
-    products = serializers.SerializerMethodField('get_products')
+    # products = serializers.SerializerMethodField('get_products')
+    products = ProductSerializer(many=True)
     children = serializers.SerializerMethodField('get_children')
     parents = serializers.SerializerMethodField('get_parents')
 
