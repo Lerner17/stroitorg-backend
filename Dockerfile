@@ -12,6 +12,7 @@ RUN mkdir -p /var/static
 RUN cp -r /root/static/* /var/static
 VOLUME /var/static
 
+RUN apt-get update && apt-get install netcat -y
 
 EXPOSE 8000
 
