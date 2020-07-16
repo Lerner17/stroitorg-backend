@@ -8,3 +8,11 @@ COPY requirements.txt /root/
 
 RUN pip install -r requirements.txt
 COPY . /root
+RUN mkdir -p /var/static
+RUN cp -r /root/static/* /var/static
+VOLUME /var/static
+
+
+EXPOSE 8000
+
+CMD ["sh", "start.sh"]
