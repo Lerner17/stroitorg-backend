@@ -8,9 +8,3 @@ COPY requirements.txt /root/
 
 RUN pip install -r requirements.txt
 COPY . /root
-
-EXPOSE 8000
-
-CMD ["python3", "manage.py", "runserver"]
-
-
