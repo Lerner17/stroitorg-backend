@@ -126,21 +126,13 @@ class UpdatePassword(APIView):
         return Response(serializer.errors, status=400)
 
 
-class AdminUserViewSet(viewsets.GenericViewSet,
-                       mixins.ListModelMixin,
-                       mixins.CreateModelMixin,
-                       mixins.DestroyModelMixin,
-                       mixins.RetrieveModelMixin):
+class AdminUserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
 
-class AdminCategoryViewSet(viewsets.GenericViewSet,
-                           mixins.ListModelMixin,
-                           mixins.CreateModelMixin,
-                           mixins.DestroyModelMixin,
-                           mixins.RetrieveModelMixin):
+class AdminCategoryViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = CategoryListSerializer
     queryset = Category.objects.all()
@@ -152,11 +144,7 @@ class AdminCategoryViewSet(viewsets.GenericViewSet,
             return self.serializer_class
 
 
-class AdminProductViewSet(viewsets.GenericViewSet,
-                          mixins.ListModelMixin,
-                          mixins.CreateModelMixin,
-                          mixins.DestroyModelMixin,
-                          mixins.RetrieveModelMixin):
+class AdminProductViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminProductSerializer
     queryset = Product.objects.all()
@@ -230,81 +218,49 @@ class AdminProductViewSet(viewsets.GenericViewSet,
             return count
 
 
-class AdminNewsViewSet(viewsets.GenericViewSet,
-                       mixins.ListModelMixin,
-                       mixins.CreateModelMixin,
-                       mixins.DestroyModelMixin,
-                       mixins.RetrieveModelMixin):
+class AdminNewsViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminNewsSerializer
     queryset = News.objects.all()
 
 
-class AdminMainSliderViewSet(viewsets.GenericViewSet,
-                             mixins.ListModelMixin,
-                             mixins.CreateModelMixin,
-                             mixins.DestroyModelMixin,
-                             mixins.RetrieveModelMixin):
+class AdminMainSliderViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminMainSliderSerializer
     queryset = MainSlider.objects.all()
 
 
-class AdminPartnerViewSet(viewsets.GenericViewSet,
-                          mixins.ListModelMixin,
-                          mixins.CreateModelMixin,
-                          mixins.DestroyModelMixin,
-                          mixins.RetrieveModelMixin):
+class AdminPartnerViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminPartnerSerializer
     queryset = Partner.objects.all()
 
 
-class AdminEmployeeViewSet(viewsets.GenericViewSet,
-                           mixins.ListModelMixin,
-                           mixins.CreateModelMixin,
-                           mixins.DestroyModelMixin,
-                           mixins.RetrieveModelMixin):
+class AdminEmployeeViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminEmployeeSerializer
     queryset = EmployeeCard.objects.all()
 
 
-class AdminAdvantageViewSet(viewsets.GenericViewSet,
-                            mixins.ListModelMixin,
-                            mixins.CreateModelMixin,
-                            mixins.DestroyModelMixin,
-                            mixins.RetrieveModelMixin):
+class AdminAdvantageViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminAdvantageSerializer
     queryset = Advantage.objects.all()
 
 
-class AdminGalleryViewSet(viewsets.GenericViewSet,
-                          mixins.ListModelMixin,
-                          mixins.CreateModelMixin,
-                          mixins.DestroyModelMixin,
-                          mixins.RetrieveModelMixin):
+class AdminGalleryViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminGallerySerializer
     queryset = Gallery.objects.all()
 
 
-class AdminProjectViewSet(viewsets.GenericViewSet,
-                          mixins.ListModelMixin,
-                          mixins.CreateModelMixin,
-                          mixins.DestroyModelMixin,
-                          mixins.RetrieveModelMixin):
+class AdminProjectViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminProjectSerializer
     queryset = Project.objects.all()
 
 
-class AdminNumberWithTextViewSet(viewsets.GenericViewSet,
-                                 mixins.ListModelMixin,
-                                 mixins.CreateModelMixin,
-                                 mixins.DestroyModelMixin,
-                                 mixins.RetrieveModelMixin):
+class AdminNumberWithTextViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AdminNumberWithTextSerializer
     queryset = NumberWithText.objects.all()
