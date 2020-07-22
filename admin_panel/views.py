@@ -166,7 +166,7 @@ class AdminProductViewSet(viewsets.ModelViewSet):
         return self.serializer_class
 
     def create(self, request, *args, **kwargs):
-        parameters = json.loads(request.data.get('parameters', False))
+        parameters = request.data.get('parameters', False)
         serializer = self.get_serializer(
             data=request.data)
         serializer.is_valid(raise_exception=False)
