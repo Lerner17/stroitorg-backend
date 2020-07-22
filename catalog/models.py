@@ -73,13 +73,6 @@ class Parameter(models.Model):
         return self.name
 
 
-class Order(models.Model):
-    buyer_name = models.CharField(max_length=64)
-    buyer_phone = models.CharField(max_length=16)
-    comment = models.CharField(max_length=255)
-    products = models.ManyToManyField(Product, related_name='order')
-
-
 # class ParameterValue(models.Model):
 #     parameter = models.ForeignKey(Parameter, related_name='values', on_delete=models.CASCADE)
 #     product = models.ForeignKey(Product,

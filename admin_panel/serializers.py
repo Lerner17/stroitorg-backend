@@ -4,6 +4,47 @@ from django.contrib.auth.models import User
 from news.models import News
 from catalog.models import Category, Product, ProductImage, Parameter, Thickness
 from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Gallery, Contacts
+from orders.models import Order, OrderProduct
+
+from catalog.serializers import ProductSerializer
+
+
+class OrderProductSerializer(serializers.ModelSerializer):
+
+    product = ProductSerializer()
+
+    class Meta:
+        model = OrderProduct
+        fields = ('id', 'quantity', 'product')
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+
+    items = OrderProductSerializer(many=True)
+
+    class Meta:
+        model = Order
+        fields = ('id', 'first_name', 'phone', 'items', 'is_delivered')
+
+
+class OrderSerializer(serializers.ModelSerializer):
+
+    total_price = serializers.SerializerMethodField()
+    items_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ('id', 'first_name', 'phone', 'total_price',
+                  'items_count', 'is_delivered')
+
+    def get_total_price(self, obj):
+        total_price = 0
+        for item in obj.items.all():
+            total_price += item.product.price * item.quantity
+        return total_price
+
+    def get_items_count(self, obj):
+        return obj.items.count()
 
 
 class ThicknessSerializer(serializers.ModelSerializer):
