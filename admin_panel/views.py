@@ -13,15 +13,24 @@ from rest_framework.views import APIView
 from catalog.serializers import CategoryListSerializer
 from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts, Gallery
 from news.models import News
-from catalog.models import Category, Product, ProductImage
+from catalog.models import Category, Product, ProductImage, Thickness
 from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySerializer, AdminProductSerializer, \
     AdminProductCreateSerializer, ChangePasswordSerializer, AdminMainSliderSerializer, AdminPartnerSerializer, \
     AdminEmployeeSerializer, AdminAdvantageSerializer, AdminProjectSerializer, AdminNumberWithTextSerializer, \
     AdminProductImageCreateSerializer, \
     AdminParameterSerializer, AdminParameterCreateSerializer, ContactsAdminSerializer, AdminGallerySerializer, \
-    AdminProductCreateSerializer
+    AdminProductCreateSerializer, ThicknessSerializer
 
 from rest_framework import mixins
+
+
+class AdminThicknessViewSet(viewsets.GenericViewSet,
+                            mixins.ListModelMixin,
+                            mixins.CreateModelMixin,
+                            mixins.DestroyModelMixin):
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = ThicknessSerializer
+    queryset = Thickness.objects.all()
 
 
 class AdminContactsAPIView(views.APIView):

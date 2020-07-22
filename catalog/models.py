@@ -39,7 +39,7 @@ class Product(models.Model):
     is_new = models.BooleanField(default=False)
     is_discount = models.BooleanField(default=False)
     thickness = models.ForeignKey(
-        Thickness, on_delete=models.SET_NULL, null=True)
+        Thickness, on_delete=models.SET_NULL, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.id and not self.slug:

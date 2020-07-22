@@ -2,8 +2,14 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from news.models import News
-from catalog.models import Category, Product, ProductImage, Parameter
+from catalog.models import Category, Product, ProductImage, Parameter, Thickness
 from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Gallery, Contacts
+
+
+class ThicknessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Thickness
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
