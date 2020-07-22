@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
@@ -16,7 +18,8 @@ from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySeria
     AdminProductCreateSerializer, ChangePasswordSerializer, AdminMainSliderSerializer, AdminPartnerSerializer, \
     AdminEmployeeSerializer, AdminAdvantageSerializer, AdminProjectSerializer, AdminNumberWithTextSerializer, \
     AdminProductImageCreateSerializer, \
-    AdminParameterSerializer, AdminParameterCreateSerializer, ContactsAdminSerializer, AdminGallerySerializer
+    AdminParameterSerializer, AdminParameterCreateSerializer, ContactsAdminSerializer, AdminGallerySerializer, \
+    AdminProductCreateSerializer
 
 from rest_framework import mixins
 
@@ -154,17 +157,23 @@ class AdminProductViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         category = Category.objects.get(
-            pk=self.request.data.get('category_id'))
+            pk=self.request.data.get('category'))
         serializer.save(category=category)
 
+    def get_serializer_class(self, *args, **kwargs):
+        if self.action == 'create':
+            return AdminProductCreateSerializer
+        return self.serializer_class
+
     def create(self, request, *args, **kwargs):
-        parameters = request.data.get('parameters', False)
-        # parameters = request.data['parameters']
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        parameters = json.loads(request.data.get('parameters', False))
+        serializer = self.get_serializer(
+            data=request.data)
+        serializer.is_valid(raise_exception=False)
         self.perform_create(serializer)
 
         if parameters:
+            print(parameters)
             parameters_to_db = []
             for parameter in parameters:
                 parameter_object = {
