@@ -166,13 +166,13 @@ class AdminProductViewSet(viewsets.ModelViewSet):
         return self.serializer_class
 
     def create(self, request, *args, **kwargs):
-        parameters = request.data.get('parameters', False)
+        parameters = json.loads(request.data.get('parameters'))
         serializer = self.get_serializer(
             data=request.data)
         serializer.is_valid(raise_exception=False)
         self.perform_create(serializer)
 
-        if parameters:
+        if len(parameters) > 0:
             print(parameters)
             parameters_to_db = []
             for parameter in parameters:
