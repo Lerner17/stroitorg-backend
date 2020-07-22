@@ -10,6 +10,7 @@ class Category(models.Model):
     description = models.TextField()
     parent = models.ForeignKey(
         'self', null=True, blank=True, on_delete=models.CASCADE)
+    is_thin = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.id and not self.slug:
