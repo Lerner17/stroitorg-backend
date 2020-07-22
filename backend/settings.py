@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     'main_page.apps.MainPageConfig',
     'news.apps.NewsConfig',
     'catalog.apps.CatalogConfig',
-    'admin_panel.apps.AdminPanelConfig'
+    'admin_panel.apps.AdminPanelConfig',
+    'orders.apps.OrdersConfig'
 ]
 
 MIDDLEWARE = [
@@ -69,12 +70,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # if DEBUG:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#         }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
+# }
 # else:
 DATABASES = {
     'default': {

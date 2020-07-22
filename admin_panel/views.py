@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, permissions, views
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,14 +14,41 @@ from catalog.serializers import CategoryListSerializer
 from main_page.models import MainSlider, Partner, EmployeeCard, Advantage, Project, NumberWithText, Contacts, Gallery
 from news.models import News
 from catalog.models import Category, Product, ProductImage, Thickness
+from orders.models import Order
 from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySerializer, AdminProductSerializer, \
     AdminProductCreateSerializer, ChangePasswordSerializer, AdminMainSliderSerializer, AdminPartnerSerializer, \
     AdminEmployeeSerializer, AdminAdvantageSerializer, AdminProjectSerializer, AdminNumberWithTextSerializer, \
     AdminProductImageCreateSerializer, \
     AdminParameterSerializer, AdminParameterCreateSerializer, ContactsAdminSerializer, AdminGallerySerializer, \
-    AdminProductCreateSerializer, ThicknessSerializer
+    AdminProductCreateSerializer, ThicknessSerializer, OrderSerializer, OrderDetailSerializer
 
 from rest_framework import mixins
+
+
+class AdminOrderViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return OrderDetailSerializer
+        return self.serializer_class
+
+    @action(methods=['PUT'], detail=True)
+    def done(self, request, pk=None):
+        order = Order.objects.get(pk=pk)
+        order.is_delivered = True
+        order.save()
+        return Response({'success': True})
+
+    @action(methods=['PUT'], detail=True)
+    def undone(self, request, pk=None):
+        order = Order.objects.get(pk=pk)
+        order.is_delivered = False
+        order.save()
+        return Response({'success': True})
 
 
 class AdminThicknessViewSet(viewsets.GenericViewSet,

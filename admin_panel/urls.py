@@ -2,7 +2,8 @@ from rest_framework.routers import DefaultRouter
 from django.urls import path
 from .views import AdminNewsViewSet, login, AdminCategoryViewSet, AdminProductViewSet, user_info, UpdatePassword, \
     AdminMainSliderViewSet, AdminPartnerViewSet, AdminEmployeeViewSet, AdminAdvantageViewSet, AdminProjectViewSet, \
-    AdminNumberWithTextViewSet, AdminUserViewSet, AdminContactsAPIView, AdminGalleryViewSet, AdminThicknessViewSet
+    AdminNumberWithTextViewSet, AdminUserViewSet, AdminContactsAPIView, AdminGalleryViewSet, AdminThicknessViewSet, \
+    AdminOrderViewSet
 
 router = DefaultRouter()
 router.register(r'users', AdminUserViewSet)
@@ -17,6 +18,7 @@ router.register(r'number_with_text', AdminNumberWithTextViewSet)
 router.register(r'categories', AdminCategoryViewSet)
 router.register(r'products', AdminProductViewSet)
 router.register(r'thickness', AdminThicknessViewSet)
+router.register(r'orders', AdminOrderViewSet)
 
 urlpatterns = [
     path('auth/login', login),
