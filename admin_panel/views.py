@@ -175,7 +175,10 @@ class AdminProductViewSet(viewsets.ModelViewSet):
         return self.serializer_class
 
     def create(self, request, *args, **kwargs):
-        parameters = json.loads(request.data.get('parameters'))
+        if request.data.get('parameters'):
+            parameters = json.loads(request.data.get('parameters'))
+        else:
+            parameters = []
         serializer = self.get_serializer(
             data=request.data)
         serializer.is_valid(raise_exception=False)
@@ -196,26 +199,14 @@ class AdminProductViewSet(viewsets.ModelViewSet):
             param_ser.is_valid(raise_exception=True)
             param_ser.save()
 
-        # images_to_db = []
-
-        # for image in request.FILES['images']:
-        # image_data = {
-        #     'image': request.FILES['image'],
-        #     'product': serializer.data['id'],
-        #     'is_preview': True
-        # }
-        #     # images_to_db.append(image_data)
-        # img_ser = AdminProductImageCreateSerializer(data=image_data)
-        # img_ser.is_valid(raise_exception=True)
-        # img_ser.save()
+        for key, image in enumerate(request.FILES.getlist('images'), 0):
+            if key == 0:
+                image_to_save = ProductImage(image=image, product_id=serializer.data['id'], is_preview=True)
+            else:
+                image_to_save = ProductImage(image=image, product_id=serializer.data['id'], is_preview=False)
+            image_to_save.save()
 
         return Response(serializer.data)
-
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return AdminProductCreateSerializer
-        else:
-            return self.serializer_class
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
