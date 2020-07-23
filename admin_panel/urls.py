@@ -3,7 +3,7 @@ from django.urls import path
 from .views import AdminNewsViewSet, login, AdminCategoryViewSet, AdminProductViewSet, user_info, UpdatePassword, \
     AdminMainSliderViewSet, AdminPartnerViewSet, AdminEmployeeViewSet, AdminAdvantageViewSet, AdminProjectViewSet, \
     AdminNumberWithTextViewSet, AdminUserViewSet, AdminContactsAPIView, AdminGalleryViewSet, AdminThicknessViewSet, \
-    AdminOrderViewSet
+    AdminOrderViewSet, LinksAPIView
 
 router = DefaultRouter()
 router.register(r'users', AdminUserViewSet)
@@ -24,6 +24,6 @@ urlpatterns = [
     path('auth/login', login),
     path('auth/user', user_info),
     path('user/update_password', UpdatePassword.as_view()),
-    path('contacts/', AdminContactsAPIView.as_view())
+    path('contacts/', LinksAPIView.as_view())
 ]
 urlpatterns += router.urls

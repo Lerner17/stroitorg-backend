@@ -5,13 +5,13 @@ from slugify import slugify
 
 
 class Contacts(models.Model):
-    twitter_url = models.URLField(null=True, blank=True)
-    intagram_url = models.URLField(null=True, blank=True)
-    vk_url = models.URLField(null=True, blank=True)
-    fb_url = models.URLField(null=True, blank=True)
+    twitter_url = models.URLField(null=True, blank=True, default='')
+    intagram_url = models.URLField(null=True, blank=True, default='')
+    vk_url = models.URLField(null=True, blank=True, default='')
+    fb_url = models.URLField(null=True, blank=True, default='')
     phone = models.CharField(max_length=255, blank=True)
-    email = models.EmailField(blank=True)
-    address = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(blank=True, default='')
+    address = models.CharField(max_length=255, blank=True, default='')
 
 
 class MainSlider(models.Model):

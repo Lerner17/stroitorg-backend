@@ -23,6 +23,28 @@ from .serializers import AdminNewsSerializer, UserSerializer, AdminCategorySeria
     AdminProductCreateSerializer, ThicknessSerializer, OrderSerializer, OrderDetailSerializer
 
 from rest_framework import mixins
+from main_page.models import Contacts
+
+
+class LinksAPIView(APIView):
+
+    def put(self, request, *args, **kwargs):
+        constacts, _ = Contacts.objects.get_or_create()
+        constacts.twitter_url = request.data.get('twitter_url')
+        constacts.intagram_url = request.data.get('intagram_url')
+        constacts.vk_url = request.data.get('vk_url')
+        constacts.fb_url = request.data.get('fb_url')
+        constacts.phone = request.data.get('phone')
+        constacts.email = request.data.get('email')
+        constacts.address = request.data.get('address')
+        constacts.save()
+        serializer = ContactsAdminSerializer(constacts)
+        return Response(serializer.data)
+
+    def get(self, request, *args, **kwargs):
+        constacts, _ = Contacts.objects.get_or_create()
+        serializer = ContactsAdminSerializer(constacts)
+        return Response(serializer.data)
 
 
 class AdminOrderViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
@@ -228,9 +250,11 @@ class AdminProductViewSet(viewsets.ModelViewSet):
 
         for key, image in enumerate(request.FILES.getlist('images'), 0):
             if key == 0:
-                image_to_save = ProductImage(image=image, product_id=serializer.data['id'], is_preview=True)
+                image_to_save = ProductImage(
+                    image=image, product_id=serializer.data['id'], is_preview=True)
             else:
-                image_to_save = ProductImage(image=image, product_id=serializer.data['id'], is_preview=False)
+                image_to_save = ProductImage(
+                    image=image, product_id=serializer.data['id'], is_preview=False)
             image_to_save.save()
 
         return Response(serializer.data)
