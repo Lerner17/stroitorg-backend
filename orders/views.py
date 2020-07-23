@@ -27,4 +27,4 @@ class OrderAPIView(APIView):
                 OrderProduct.objects.create(
                     order=order, product_id=item['id'], quantity=item['quantity'])
 
-        return Response(sttatus=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
