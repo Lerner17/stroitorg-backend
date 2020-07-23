@@ -219,7 +219,7 @@ class AdminProductViewSet(viewsets.ModelViewSet):
         serializer.save(category=category)
 
     def get_serializer_class(self, *args, **kwargs):
-        if self.action == 'create':
+        if self.action == 'create' or self.action == 'update':
             return AdminProductCreateSerializer
         return self.serializer_class
 
@@ -272,6 +272,28 @@ class AdminProductViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        product = Product.objects.get(pk=kwargs.get('pk'))
+        serializer = AdminProductCreateSerializer(product, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        if 'preview' in request.FILES:
+            preview = request.FILES['preview']
+            save_preview = ProductImage(
+                image=preview, product_id=product.pk, is_preview=True)
+            save_preview.save()
+
+        if 'images' in request.FILES:
+            for image in request.FILES.getlist('images'):
+                image_to_save = ProductImage(
+                    image=image, product_id=product.pk, is_preview=False)
+                image_to_save.save()
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
 
     def get_paginated_count(self):
         count = self.request.GET.get('count')
