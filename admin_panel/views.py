@@ -248,14 +248,17 @@ class AdminProductViewSet(viewsets.ModelViewSet):
             param_ser.is_valid(raise_exception=True)
             param_ser.save()
 
-        for key, image in enumerate(request.FILES.getlist('images'), 0):
-            if key == 0:
-                image_to_save = ProductImage(
-                    image=image, product_id=serializer.data['id'], is_preview=True)
-            else:
+        if 'preview' in request.FILES:
+            preview = request.FILES['preview']
+            save_preview = ProductImage(
+                image=preview, product_id=serializer.data['id'], is_preview=True)
+            save_preview.save()
+
+        if 'images' in request.FILES:
+            for image in request.FILES.getlist('images'):
                 image_to_save = ProductImage(
                     image=image, product_id=serializer.data['id'], is_preview=False)
-            image_to_save.save()
+                image_to_save.save()
 
         return Response(serializer.data)
 
