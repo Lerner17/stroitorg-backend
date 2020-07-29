@@ -7,6 +7,7 @@ from rest_framework import viewsets, permissions, views
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -160,6 +161,19 @@ def user_info(request):
     }, status=200)
 
 
+class UserAPIView(APIView):
+
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self, request, *args, **kwargs):
+        # serializer = self.serializer_class(data=request.data,
+        #    context={'request': request})
+        if request.user.is_authenticated:
+            serializer = UserSerializer(request.user)
+            return Response(serializer.data)
+        return Response(status=401)
+
+
 class UpdatePassword(APIView):
     """
     An endpoint for changing password.
@@ -275,7 +289,8 @@ class AdminProductViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         product = Product.objects.get(pk=kwargs.get('pk'))
-        serializer = AdminProductCreateSerializer(product, data=request.data, partial=True)
+        serializer = AdminProductCreateSerializer(
+            product, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         if 'preview' in request.FILES:
