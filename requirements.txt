@@ -1,7 +1,7 @@
 asgiref==3.2.3
 autopep8==1.5
 awesome-slugify==1.6.5
-Django==3.0.4
+Django==3.0.7
 django-appconf==1.0.4
 django-cors-headers==3.2.1
 django-imagekit==4.0.2
